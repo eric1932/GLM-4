@@ -77,6 +77,9 @@ class Seq2SeqTrainer(_Seq2SeqTrainer):
                 output_ids = inputs.pop("output_ids")
             input_ids = inputs["input_ids"]
 
+            if "labels" in inputs and inputs["labels"] is None:  # Fix eval on labels=None
+                del inputs["labels"]
+
             loss, generated_tokens, labels = super().prediction_step(
                 model, inputs, prediction_loss_only, ignore_keys, **gen_kwargs
             )
